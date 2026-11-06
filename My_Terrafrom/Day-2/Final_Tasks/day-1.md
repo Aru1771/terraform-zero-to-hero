@@ -72,4 +72,72 @@ tfvars:
         environment = "prod",
         application = "empower"
     }
+
+
+Task 2: 
+
+<img width="901" height="810" alt="image" src="https://github.com/user-attachments/assets/74aada4a-d2b6-4a60-967c-604632d32d64" />
+
+Vars.tf:
+
+        variable "docker_config" {
+            type = object({
+                image = string
+                tag = string
+                resources = object({
+                    cpu = string
+                    memory = string
+                })
+        
+                ports = list(number)
+            })
+        
+        }
+        
+        variable "environment_configuration" {
+            type = map(object({
+                environment = string
+                instance_type = string
+                replicas = number
+                monitoring = bool
+            }))
+        }
+
+tfvars:
+
+    docker_config = {
+        image = "empower-app"
+        tag = "FR4"
     
+        resources = {
+            cpu = "500m"
+            memory = "200mi"
+        }
+    
+        ports = [8081, 8082, 8083]
+    }
+    
+    environment_configuration =  {
+        dev = {
+            environment = "dev"
+            instance_type = "t2.micro"
+            replicas = 1
+            monitoring = false
+        },
+    
+        stage = {
+            environment = "stage"
+            instance_type = "t2.small"
+            replicas = 2
+            monitoring = true
+        },
+    
+        prod = {
+            environment = "prod"
+            instance_type = "t2.medium"
+            replicas = 3
+            monitoring = true
+        }
+    
+    
+    }
